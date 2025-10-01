@@ -10,7 +10,7 @@
     "dev": "vite",
     "preview": "vite preview",
     "deploy": "npm run build:prod && gh-pages -d dist",
-    "vercel-build": "./build.sh"
+    "vercel-build": "node vercel-build.js"
   },
   "keywords": [
     "pwa",
