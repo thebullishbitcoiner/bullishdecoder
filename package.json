@@ -1,6 +1,6 @@
 {
   "name": "bullishdecoder",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A bullish PWA to decode all the things",
   "main": "index.html",
   "scripts": {
@@ -10,7 +10,7 @@
     "dev": "vite",
     "preview": "vite preview",
     "deploy": "npm run build:prod && gh-pages -d dist",
-    "vercel-build": "npm run build"
+    "vercel-build": "./build.sh"
   },
   "keywords": [
     "pwa",

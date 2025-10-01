@@ -11,7 +11,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!assets|sw.js|package.json).*)",
+      "source": "/((?!assets|sw.js|package.json|favicon.ico).*)",
       "destination": "/index.html"
     }
   ],
