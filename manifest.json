@@ -1,11 +1,11 @@
 {
   "name": "bullishDecoder",
   "short_name": "bullishDecoder",
-  "description": "Decode BOLT12 offers and invoices with a retro terminal interface",
-  "start_url": "/bullishdecoder/",
+  "description": "A bullish PWA to decode all the things",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#ff9900",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "orientation": "portrait-primary",
   "icons": [
     {
