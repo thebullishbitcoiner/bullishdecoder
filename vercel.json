@@ -35,7 +35,7 @@
       ]
     },
     {
-      "source": "/icon-192.png",
+      "source": "/assets/icon-192.png",
       "headers": [
         {
           "key": "Cache-Control",
@@ -44,7 +44,7 @@
       ]
     },
     {
-      "source": "/icon-512.png",
+      "source": "/assets/icon-512.png",
       "headers": [
         {
           "key": "Cache-Control",
