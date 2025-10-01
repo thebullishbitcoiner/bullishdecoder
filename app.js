@@ -50,7 +50,11 @@ class BullishDecoder {
         try {
             const clipboardText = await navigator.clipboard.readText();
             this.inputField.value = clipboardText;
-            this.inputField.focus();
+            
+            // Don't focus on mobile to prevent keyboard from appearing
+            if (!this.isMobile()) {
+                this.inputField.focus();
+            }
             
             if (clipboardText.trim()) {
                 this.decodeString(clipboardText.trim());
@@ -59,6 +63,11 @@ class BullishDecoder {
             this.updateStatus('Failed to read clipboard - try pasting manually');
             console.error('Clipboard read failed:', error);
         }
+    }
+    
+    isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               (window.innerWidth <= 768);
     }
     
     decodeString(input) {
