@@ -11,7 +11,7 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!assets|sw.js|package.json).*)",
       "destination": "/index.html"
     }
   ],
