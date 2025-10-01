@@ -1,0 +1,23 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#0a0a0a"/>
+  <rect x="32" y="32" width="448" height="448" fill="#1a1a1a" stroke="#ff9900" stroke-width="4"/>
+  
+  <!-- Terminal window -->
+  <rect x="64" y="80" width="384" height="256" fill="#0f0f0f" stroke="#333" stroke-width="2"/>
+  
+  <!-- Terminal header -->
+  <rect x="64" y="80" width="384" height="32" fill="#ff9900"/>
+  <text x="80" y="100" font-family="monospace" font-size="12" fill="#0a0a0a">bullishDecoder</text>
+  
+  <!-- Terminal content -->
+  <text x="80" y="140" font-family="monospace" font-size="14" fill="#00ff00">$ decode</text>
+  <text x="80" y="160" font-family="monospace" font-size="12" fill="#ff9900">lno1qgsqvgnwgcg35z6ee2h3yczraddm72xrfua9uve2rlrm9deu7xyfzrc2q42xjurnyyfqys2zzcssx06thlxk00g0epvynxff5vj46p3en8hz8ax9uy4ckyyfuyet8eqg</text>
+  <text x="80" y="180" font-family="monospace" font-size="12" fill="#00ff00">{"type": "offer", "description": "Tips!"}</text>
+  
+  <!-- Lightning bolt -->
+  <path d="M256 200 L280 240 L240 240 L264 280 L224 280 L256 320 L288 280 L248 280 L272 240 L312 240 L256 200 Z" fill="#ff9900"/>
+  
+  <!-- Decode symbol -->
+  <circle cx="400" cy="200" r="24" fill="none" stroke="#ff9900" stroke-width="3"/>
+  <path d="M388 200 L400 188 L412 200 L400 212 Z" fill="#ff9900"/>
+</svg>

@@ -1,0 +1,27 @@
+{
+  "name": "bullishDecoder",
+  "short_name": "bullishDecoder",
+  "description": "Decode BOLT12 offers and invoices with a retro terminal interface",
+  "start_url": "/bullishdecoder/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#ff9900",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}
