@@ -7,6 +7,10 @@ const path = require('path');
 console.log('Starting Vercel build...');
 
 try {
+  // Bump version automatically
+  console.log('Bumping version...');
+  execSync('npm version patch --no-git-tag-version', { stdio: 'inherit' });
+  
   // Run vite build
   console.log('Running vite build...');
   execSync('npm run build', { stdio: 'inherit' });
@@ -19,6 +23,16 @@ try {
     fs.copyFileSync('package.json', 'dist/package.json');
     console.log('✓ Copied package.json');
   }
+  
+  // Update service worker cache version to match package.json version
+  console.log('Updating service worker cache version...');
+  const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+  const version = packageJson.version;
+  
+  let swContent = fs.readFileSync('sw.js', 'utf8');
+  swContent = swContent.replace(/CACHE_NAME = 'bullishdecoder-v[^']*'/, `CACHE_NAME = 'bullishdecoder-v${version}'`);
+  fs.writeFileSync('sw.js', swContent);
+  console.log(`✓ Updated service worker cache to v${version}`);
   
   // Copy service worker
   if (fs.existsSync('sw.js')) {

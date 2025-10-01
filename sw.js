@@ -1,5 +1,5 @@
 // Service Worker for bullishDecoder PWA
-const CACHE_NAME = 'bullishdecoder-v0.0.14';
+const CACHE_NAME = 'bullishdecoder-v0.0.15';
 const urlsToCache = [
   '/',
   '/index.html',
