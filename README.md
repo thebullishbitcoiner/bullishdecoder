@@ -26,23 +26,20 @@ npm run build
 npm run preview
 ```
 
-## GitHub Pages Deployment
+## Vercel Deployment
 
-The app is configured for GitHub Pages deployment:
+The app is configured for Vercel deployment:
 
-1. **Push to GitHub**: Make sure your repository is on GitHub
-2. **Enable GitHub Pages**: Go to repository Settings → Pages → Source: Deploy from a branch → gh-pages
-3. **Deploy**: Run the deployment command:
+1. **Connect to Vercel**: Link your GitHub repository to Vercel
+2. **Automatic Deployments**: Vercel will automatically deploy on every push to main
+3. **Manual Build**: Run the Vercel build script locally:
 
 ```bash
-# Install gh-pages if not already installed
-npm install
-
-# Deploy to GitHub Pages
-npm run deploy
+# Run Vercel build (bumps version and builds)
+npm run vercel-build
 ```
 
-The app will be available at: `https://[your-username].github.io/bullishdecoder/`
+The app will be available at your Vercel deployment URL.
 
 ## PWA Features
 

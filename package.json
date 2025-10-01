@@ -9,7 +9,6 @@
     "build:prod": "./build.sh",
     "dev": "vite",
     "preview": "vite preview",
-    "deploy": "npm run build:prod && gh-pages -d dist",
     "vercel-build": "node vercel-build.js"
   },
   "keywords": [
@@ -25,7 +24,6 @@
     "bolt12-decoder": "^1.0.0"
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1",
     "http-server": "^14.1.1",
     "vite": "^7.1.7"
   }
