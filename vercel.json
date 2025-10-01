@@ -35,7 +35,25 @@
       ]
     },
     {
+      "source": "/assets/icon-144.png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
       "source": "/assets/icon-192.png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/icon-384.png",
       "headers": [
         {
           "key": "Cache-Control",
