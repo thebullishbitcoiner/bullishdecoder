@@ -1,11 +1,11 @@
 // Service Worker for bullishDecoder PWA
-const CACHE_NAME = 'bullishdecoder-v0.0.18';
+const CACHE_NAME = 'bullishdecoder-v0.0.20';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
   '/package.json',
-  '/assets/icon-512.png'
+  '/assets/logo.png'
 ];
 
 // Install event - cache resources

@@ -20,7 +20,7 @@ rm sw.js.bak
 echo "Copying assets to dist folder..."
 cp package.json dist/
 cp sw.js dist/
-cp icon-512.png dist/assets/
+cp logo.png dist/assets/
 
 echo "Build complete! Assets copied to dist folder."
 echo "Ready for deployment to Vercel."

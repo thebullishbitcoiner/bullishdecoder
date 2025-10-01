@@ -41,13 +41,13 @@ try {
   }
   
   // Copy icon
-  if (fs.existsSync('icon-512.png')) {
+  if (fs.existsSync('logo.png')) {
     // Ensure assets directory exists
     if (!fs.existsSync('dist/assets')) {
       fs.mkdirSync('dist/assets', { recursive: true });
     }
-    fs.copyFileSync('icon-512.png', 'dist/assets/icon-512.png');
-    console.log('✓ Copied icon-512.png');
+    fs.copyFileSync('logo.png', 'dist/assets/logo.png');
+    console.log('✓ Copied logo.png');
   }
   
   console.log('Vercel build complete!');
