@@ -6,6 +6,7 @@ A Progressive Web App (PWA) for decoding BOLT12 offers and invoices with a retro
 
 - 🧡 Retro terminal-style dark theme with orange accents
 - 🔍 BOLT12 offer and invoice string decoding
+- ⚡ Lightning address decoding and LNURL-pay data fetching
 - 📱 Progressive Web App (PWA) - installable on mobile and desktop
 - ⚡ Offline functionality with service worker caching
 - 🎯 Clean, minimal interface with paste functionality
@@ -50,7 +51,7 @@ The app will be available at your Vercel deployment URL.
 
 ## Usage
 
-1. Paste a BOLT12 offer or invoice string into the input field
+1. Paste a BOLT12 offer/invoice string or Lightning address into the input field
 2. Click "paste" to paste from clipboard
 3. View the decoded output in the terminal-style interface
 
@@ -60,6 +61,7 @@ The app will be available at your Vercel deployment URL.
 - **Build Tool**: Vite
 - **PWA**: Service Worker, Web App Manifest
 - **BOLT12 Decoding**: bolt12-decoder library
+- **Lightning Address Decoding**: @getalby/lightning-tools library
 
 ## License
 

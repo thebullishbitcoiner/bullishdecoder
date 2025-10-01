@@ -1,5 +1,6 @@
 // bullishDecoder - BOLT12 Decoder PWA
 import BOLT12Decoder from 'bolt12-decoder';
+import { LightningAddress } from '@getalby/lightning-tools';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
 
@@ -16,7 +17,6 @@ class BullishDecoder {
     
     init() {
         // Add event listeners
-        this.inputField.addEventListener('input', this.handleInput.bind(this));
         this.inputField.addEventListener('paste', this.handlePaste.bind(this));
         this.pasteButton.addEventListener('click', this.handlePasteButton.bind(this));
         
@@ -24,16 +24,7 @@ class BullishDecoder {
         this.loadVersion();
         
         // Initial status
-        this.updateStatus('Ready - Paste a BOLT12 string to decode');
-    }
-    
-    handleInput(event) {
-        const input = event.target.value.trim();
-        if (input) {
-            this.decodeString(input);
-        } else {
-            this.clearOutput();
-        }
+        this.updateStatus('Ready - Use paste button or Ctrl+V to decode');
     }
     
     handlePaste(event) {
@@ -70,12 +61,12 @@ class BullishDecoder {
                (window.innerWidth <= 768);
     }
     
-    decodeString(input) {
+    async decodeString(input) {
         this.updateStatus('Decoding...');
         
         try {
             // Detect string type and decode
-            const result = this.detectAndDecode(input);
+            const result = await this.detectAndDecode(input);
             
             if (result.success) {
                 this.displayResult(result);
@@ -90,7 +81,7 @@ class BullishDecoder {
         }
     }
     
-    detectAndDecode(input) {
+    async detectAndDecode(input) {
         // Remove any whitespace
         const cleanInput = input.replace(/\s/g, '');
         
@@ -99,10 +90,58 @@ class BullishDecoder {
             return this.decodeBOLT12(cleanInput, 'offer');
         } else if (cleanInput.startsWith('lni1')) {
             return this.decodeBOLT12(cleanInput, 'invoice');
+        } else if (this.isLightningAddress(cleanInput)) {
+            return await this.decodeLightningAddress(cleanInput);
         } else {
             return {
                 success: false,
-                error: 'Not a recognized BOLT12 string. Expected strings starting with "lno1" (offers) or "lni1" (invoices).'
+                error: 'Not a recognized format. Expected BOLT12 strings (lno1/lni1) or Lightning addresses (user@domain.com).'
+            };
+        }
+    }
+    
+    isLightningAddress(input) {
+        // Basic lightning address validation: user@domain.com format
+        const lightningAddressRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return lightningAddressRegex.test(input);
+    }
+    
+    async decodeLightningAddress(input) {
+        try {
+            this.updateStatus('Fetching Lightning address data...');
+            
+            const lnAddress = new LightningAddress(input);
+            await lnAddress.fetch();
+            
+            if (!lnAddress.lnurlpData) {
+                return {
+                    success: false,
+                    error: 'No LNURL-pay data found for this Lightning address'
+                };
+            }
+            
+            // Format the lightning address data for display
+            const formattedData = {
+                address: input,
+                domain: lnAddress.domain,
+                username: lnAddress.username,
+                lnurlpData: lnAddress.lnurlpData,
+                callback: lnAddress.lnurlpData.callback,
+                maxSendable: lnAddress.lnurlpData.maxSendable,
+                minSendable: lnAddress.lnurlpData.minSendable,
+                metadata: lnAddress.lnurlpData.metadata,
+                tag: lnAddress.lnurlpData.tag
+            };
+            
+            return {
+                success: true,
+                type: 'lightning-address',
+                data: formattedData
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: `Lightning address decoding failed: ${error.message}`
             };
         }
     }
@@ -159,7 +198,7 @@ class BullishDecoder {
         this.stringType.className = 'string-type';
         this.outputContent.innerHTML = '<div class="placeholder">Waiting for input...</div>';
         this.outputContent.className = 'output-content';
-        this.updateStatus('Ready - Paste a BOLT12 string to decode');
+        this.updateStatus('Ready - Use paste button or Ctrl+V to decode');
     }
     
     formatJSON(obj) {

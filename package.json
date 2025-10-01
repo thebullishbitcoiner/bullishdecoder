@@ -1,6 +1,6 @@
 {
   "name": "bullishdecoder",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "A bullish PWA to decode all the things",
   "main": "index.html",
   "scripts": {
@@ -15,12 +15,15 @@
     "pwa",
     "bolt12",
     "lightning",
+    "lightning-address",
+    "lnurl",
     "decoder",
     "terminal"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@getalby/lightning-tools": "^6.0.0",
     "bolt12-decoder": "^1.0.0"
   },
   "devDependencies": {
