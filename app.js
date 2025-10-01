@@ -213,7 +213,7 @@ class BullishDecoder {
             // Fallback to hardcoded version
             const versionElement = document.getElementById('version');
             if (versionElement) {
-                versionElement.textContent = 'v0.0.6';
+                versionElement.textContent = 'v0.0.10';
             }
         }
     }
