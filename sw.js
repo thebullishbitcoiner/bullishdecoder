@@ -1,13 +1,13 @@
 // Service Worker for bullishDecoder PWA
-const CACHE_NAME = 'bullishdecoder-v1.0.0';
+const CACHE_NAME = 'bullishdecoder-v0.0.4';
 const urlsToCache = [
-  '/bullishdecoder/',
-  '/bullishdecoder/index.html',
-  '/bullishdecoder/manifest.json',
-  '/bullishdecoder/package.json',
-  '/bullishdecoder/icon-192.png',
-  '/bullishdecoder/icon-512.png',
-  '/bullishdecoder/favicon.ico'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/package.json',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/favicon.ico'
 ];
 
 // Install event - cache resources
@@ -55,7 +55,7 @@ self.addEventListener('fetch', (event) => {
         }).catch(() => {
           // If both cache and network fail, show offline page
           if (event.request.destination === 'document') {
-            return caches.match('/bullishdecoder/index.html');
+            return caches.match('/index.html');
           }
         });
       })

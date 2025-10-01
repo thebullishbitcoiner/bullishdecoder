@@ -192,8 +192,8 @@ class BullishDecoder {
     
     async loadVersion() {
         try {
-            // Try to fetch from the correct path for GitHub Pages
-            const response = await fetch('/bullishdecoder/package.json');
+            // Fetch package.json from root (Vercel deployment)
+            const response = await fetch('/package.json');
             const packageData = await response.json();
             const versionElement = document.getElementById('version');
             if (versionElement) {
@@ -204,7 +204,7 @@ class BullishDecoder {
             // Fallback to hardcoded version
             const versionElement = document.getElementById('version');
             if (versionElement) {
-                versionElement.textContent = 'v0.0.3';
+                versionElement.textContent = 'v0.0.4';
             }
         }
     }

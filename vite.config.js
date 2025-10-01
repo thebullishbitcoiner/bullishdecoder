@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/bullishdecoder/', // GitHub Pages repository name
+  // No base path needed for Vercel - deploys from root
   build: {
     outDir: 'dist',
     rollupOptions: {
