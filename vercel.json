@@ -11,6 +11,18 @@
   ],
   "routes": [
     {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/sw.js",
+      "dest": "/sw.js"
+    },
+    {
+      "src": "/package.json",
+      "dest": "/package.json"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
