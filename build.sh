@@ -13,4 +13,4 @@ cp icon-192.png dist/assets/
 cp icon-512.png dist/assets/
 
 echo "Build complete! Assets copied to dist folder."
-echo "Ready for deployment to GitHub Pages."
+echo "Ready for deployment to Vercel."
