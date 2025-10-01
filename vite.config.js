@@ -13,5 +13,13 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true
+  },
+  optimizeDeps: {
+    include: ['bolt12-decoder']
+  },
+  resolve: {
+    alias: {
+      'bolt12-decoder': '/node_modules/bolt12-decoder/dist/index.js'
+    }
   }
 })
