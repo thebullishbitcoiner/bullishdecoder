@@ -1,0 +1,32 @@
+{
+  "name": "bullishdecoder",
+  "version": "0.0.3",
+  "description": "A PWA for decoding BOLT12 offers and invoices with a retro terminal interface",
+  "main": "index.html",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "build:prod": "./build.sh",
+    "dev": "vite",
+    "preview": "vite preview",
+    "deploy": "npm run build:prod && gh-pages -d dist"
+  },
+  "keywords": [
+    "pwa",
+    "bolt12",
+    "lightning",
+    "decoder",
+    "terminal"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bolt12-decoder": "^1.0.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1",
+    "http-server": "^14.1.1",
+    "vite": "^7.1.7"
+  }
+}
+
