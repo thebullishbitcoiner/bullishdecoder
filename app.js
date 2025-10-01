@@ -236,3 +236,87 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// PWA Install functionality
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    // Show install button or notification
+    showInstallPrompt();
+});
+
+function showInstallPrompt() {
+    // Create a simple install notification
+    const installNotification = document.createElement('div');
+    installNotification.id = 'install-notification';
+    installNotification.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            border: 1px solid #ff9900;
+            color: #ff9900;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            z-index: 1000;
+            max-width: 300px;
+        ">
+            <div style="margin-bottom: 10px;">📱 Install bullishDecoder</div>
+            <button id="install-btn" style="
+                background: #ff9900;
+                color: #000;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 3px;
+                font-family: inherit;
+                font-size: 11px;
+                cursor: pointer;
+                margin-right: 10px;
+            ">Install</button>
+            <button id="dismiss-btn" style="
+                background: transparent;
+                color: #ff9900;
+                border: 1px solid #ff9900;
+                padding: 5px 10px;
+                border-radius: 3px;
+                font-family: inherit;
+                font-size: 11px;
+                cursor: pointer;
+            ">Dismiss</button>
+        </div>
+    `;
+    
+    document.body.appendChild(installNotification);
+    
+    // Add event listeners
+    document.getElementById('install-btn').addEventListener('click', installPWA);
+    document.getElementById('dismiss-btn').addEventListener('click', () => {
+        document.body.removeChild(installNotification);
+    });
+}
+
+function installPWA() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    }
+    // Remove the notification
+    const notification = document.getElementById('install-notification');
+    if (notification) {
+        document.body.removeChild(notification);
+    }
+}

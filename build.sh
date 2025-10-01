@@ -9,6 +9,7 @@ npm run build
 # Copy additional assets to dist folder
 echo "Copying assets to dist folder..."
 cp package.json dist/
+cp sw.js dist/
 cp icon-512.png dist/assets/
 
 echo "Build complete! Assets copied to dist folder."
