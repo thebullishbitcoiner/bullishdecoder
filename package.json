@@ -1,6 +1,6 @@
 {
   "name": "bullishdecoder",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A PWA for decoding BOLT12 offers and invoices with a retro terminal interface",
   "main": "index.html",
   "scripts": {
@@ -29,3 +29,4 @@
     "vite": "^7.1.7"
   }
 }
+

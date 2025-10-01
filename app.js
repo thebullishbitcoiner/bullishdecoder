@@ -1,5 +1,5 @@
 // bullishDecoder - BOLT12 Decoder PWA
-import BOLT12Decoder from './node_modules/bolt12-decoder/dist/index.js';
+import BOLT12Decoder from 'bolt12-decoder';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
 
@@ -204,7 +204,7 @@ class BullishDecoder {
             // Fallback to hardcoded version
             const versionElement = document.getElementById('version');
             if (versionElement) {
-                versionElement.textContent = 'v0.0.2';
+                versionElement.textContent = 'v0.0.3';
             }
         }
     }
