@@ -1,5 +1,5 @@
 // bullishDecoder - BOLT12 Decoder PWA
-import BOLT12Decoder from 'bolt12-decoder';
+import BOLT12Decoder from './node_modules/bolt12-decoder/dist/index.js';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
 
@@ -192,7 +192,8 @@ class BullishDecoder {
     
     async loadVersion() {
         try {
-            const response = await fetch('/package.json');
+            // Try to fetch from the correct path for GitHub Pages
+            const response = await fetch('/bullishdecoder/package.json');
             const packageData = await response.json();
             const versionElement = document.getElementById('version');
             if (versionElement) {
@@ -200,7 +201,11 @@ class BullishDecoder {
             }
         } catch (error) {
             console.error('Failed to load version:', error);
-            // Keep the default version if loading fails
+            // Fallback to hardcoded version
+            const versionElement = document.getElementById('version');
+            if (versionElement) {
+                versionElement.textContent = 'v0.0.2';
+            }
         }
     }
 }

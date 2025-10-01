@@ -6,9 +6,10 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
+    "build:prod": "./build.sh",
     "dev": "vite",
     "preview": "vite preview",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build:prod && gh-pages -d dist"
   },
   "keywords": [
     "pwa",

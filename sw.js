@@ -4,8 +4,10 @@ const urlsToCache = [
   '/bullishdecoder/',
   '/bullishdecoder/index.html',
   '/bullishdecoder/manifest.json',
+  '/bullishdecoder/package.json',
   '/bullishdecoder/icon-192.png',
-  '/bullishdecoder/icon-512.png'
+  '/bullishdecoder/icon-512.png',
+  '/bullishdecoder/favicon.ico'
 ];
 
 // Install event - cache resources

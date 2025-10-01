@@ -16,10 +16,5 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['bolt12-decoder']
-  },
-  resolve: {
-    alias: {
-      'bolt12-decoder': '/node_modules/bolt12-decoder/dist/index.js'
-    }
   }
 })
