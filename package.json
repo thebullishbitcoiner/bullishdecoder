@@ -14,7 +14,9 @@
   "keywords": [
     "pwa",
     "bolt12",
+    "bolt11",
     "lightning",
+    "lightning-invoice",
     "lightning-address",
     "lnurl",
     "decoder",

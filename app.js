@@ -1,6 +1,7 @@
 // bullishDecoder - BOLT12 Decoder PWA
 import BOLT12Decoder from 'bolt12-decoder';
 import { LightningAddress } from '@getalby/lightning-tools';
+import { Invoice } from '@getalby/lightning-tools/bolt11';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
 
@@ -90,20 +91,67 @@ class BullishDecoder {
             return this.decodeBOLT12(cleanInput, 'offer');
         } else if (cleanInput.startsWith('lni1')) {
             return this.decodeBOLT12(cleanInput, 'invoice');
+        } else if (this.isLightningInvoice(cleanInput)) {
+            return this.decodeLightningInvoice(cleanInput);
         } else if (this.isLightningAddress(cleanInput)) {
             return await this.decodeLightningAddress(cleanInput);
         } else {
             return {
                 success: false,
-                error: 'Not a recognized format. Expected BOLT12 strings (lno1/lni1) or Lightning addresses (user@domain.com).'
+                error: 'Not a recognized format. Expected BOLT12 strings (lno1/lni1), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
             };
         }
+    }
+    
+    isLightningInvoice(input) {
+        // Lightning invoice validation: starts with lnbc (mainnet) or lntb (testnet)
+        return input.startsWith('lnbc') || input.startsWith('lntb');
     }
     
     isLightningAddress(input) {
         // Basic lightning address validation: user@domain.com format
         const lightningAddressRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return lightningAddressRegex.test(input);
+    }
+    
+    decodeLightningInvoice(input) {
+        try {
+            this.updateStatus('Decoding Lightning invoice...');
+            
+            const invoice = new Invoice({ pr: input });
+            
+            // Format the lightning invoice data for display
+            const formattedData = {
+                paymentRequest: input,
+                amount: invoice.amount,
+                amountMsat: invoice.amountMsat,
+                description: invoice.description,
+                descriptionHash: invoice.descriptionHash,
+                paymentHash: invoice.paymentHash,
+                paymentSecret: invoice.paymentSecret,
+                destination: invoice.destination,
+                timestamp: invoice.timestamp,
+                expiry: invoice.expiry,
+                cltvExpiry: invoice.cltvExpiry,
+                features: invoice.features,
+                network: invoice.network,
+                tags: invoice.tags,
+                isExpired: invoice.isExpired,
+                isExpiredAt: invoice.isExpiredAt,
+                isExpiredAtDate: invoice.isExpiredAtDate
+            };
+            
+            return {
+                success: true,
+                type: 'lightning-invoice',
+                data: formattedData
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: `Lightning invoice decoding failed: ${error.message}`
+            };
+        }
     }
     
     async decodeLightningAddress(input) {
