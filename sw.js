@@ -1,5 +1,5 @@
 // Service Worker for bullishDecoder PWA
-const CACHE_NAME = 'bullishdecoder-v0.0.20';
+const CACHE_NAME = 'bullishdecoder-v0.0.22';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -10,6 +10,7 @@ const urlsToCache = [
 
 // Install event - cache resources
 self.addEventListener('install', (event) => {
+  console.log('Service Worker installing with cache:', CACHE_NAME);
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -20,48 +21,50 @@ self.addEventListener('install', (event) => {
         console.log('Cache install failed:', error);
       })
   );
+  // Skip waiting to activate immediately
+  self.skipWaiting();
 });
 
-// Fetch event - serve from cache when offline
+// Fetch event - network first strategy for better cache invalidation
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then((response) => {
-        // Return cached version or fetch from network
-        if (response) {
+        // Check if we received a valid response
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
         
-        // Clone the request because it's a stream
-        const fetchRequest = event.request.clone();
+        // Clone the response because it's a stream
+        const responseToCache = response.clone();
         
-        return fetch(fetchRequest).then((response) => {
-          // Check if we received a valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-          
-          // Clone the response because it's a stream
-          const responseToCache = response.clone();
-          
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-          
-          return response;
-        }).catch(() => {
-          // If both cache and network fail, show offline page
-          if (event.request.destination === 'document') {
-            return caches.match('/index.html');
-          }
-        });
+        // Cache the response
+        caches.open(CACHE_NAME)
+          .then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        
+        return response;
+      })
+      .catch(() => {
+        // If network fails, try cache
+        return caches.match(event.request)
+          .then((response) => {
+            if (response) {
+              return response;
+            }
+            // If both cache and network fail, show offline page for document requests
+            if (event.request.destination === 'document') {
+              return caches.match('/index.html');
+            }
+          });
       })
   );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating with cache:', CACHE_NAME);
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -72,6 +75,9 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
+    }).then(() => {
+      // Take control of all clients immediately
+      return self.clients.claim();
     })
   );
 });
