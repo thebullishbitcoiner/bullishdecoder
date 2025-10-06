@@ -1,6 +1,6 @@
 {
   "name": "bullishdecoder",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "A bullish PWA to decode all the things",
   "main": "index.html",
   "scripts": {
