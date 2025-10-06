@@ -219,22 +219,12 @@ class BullishDecoder {
     
     decodeCashuToken(input) {
         try {
-            
             const decodedToken = getDecodedToken(input);
-            
-            // Format the Cashu token data for display
-            const formattedData = {
-                token: input,
-                mint: decodedToken.mint,
-                unit: decodedToken.unit,
-                proofs: decodedToken.proofs,
-                totalAmount: decodedToken.proofs.reduce((sum, proof) => sum + proof.amount, 0)
-            };
             
             return {
                 success: true,
                 type: 'cashu-token',
-                data: formattedData
+                data: decodedToken
             };
         } catch (error) {
             return {

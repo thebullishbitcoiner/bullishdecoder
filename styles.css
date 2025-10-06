@@ -17,7 +17,7 @@ body {
 .terminal {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 21px;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -218,17 +218,12 @@ body {
 /* Success styling */
 .success {
     color: #ff9900;
-    background-color: #2a1a0f;
-    border: 1px solid #ff9900;
-    padding: 15px;
-    border-radius: 4px;
-    margin: 10px 0;
 }
 
 /* Terminal footer */
 .terminal-footer {
     margin-top: auto;
-    padding-top: 20px;
+    padding-top: 21px;
     border-top: 1px solid #333;
 }
 
@@ -256,7 +251,7 @@ body {
 /* Responsive design */
 @media (max-width: 768px) {
     .terminal {
-        padding: 15px;
+        padding: 21px;
     }
     
     .terminal-title {
@@ -270,6 +265,10 @@ body {
     
     .output-header {
         gap: 10px;
+    }
+    
+    .terminal-footer {
+        padding-bottom: 21px;
     }
 }
 
