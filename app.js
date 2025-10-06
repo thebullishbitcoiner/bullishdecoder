@@ -2,6 +2,7 @@
 import BOLT12Decoder from 'bolt12-decoder';
 import { LightningAddress } from '@getalby/lightning-tools';
 import { Invoice } from '@getalby/lightning-tools/bolt11';
+import { getDecodedToken } from '@cashu/cashu-ts';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
 
@@ -91,6 +92,8 @@ class BullishDecoder {
             return this.decodeBOLT12(cleanInput, 'offer');
         } else if (cleanInput.startsWith('lni1')) {
             return this.decodeBOLT12(cleanInput, 'invoice');
+        } else if (cleanInput.startsWith('cashu')) {
+            return this.decodeCashuToken(cleanInput);
         } else if (this.isLightningInvoice(cleanInput)) {
             return this.decodeLightningInvoice(cleanInput);
         } else if (this.isLightningAddress(cleanInput)) {
@@ -98,7 +101,7 @@ class BullishDecoder {
         } else {
             return {
                 success: false,
-                error: 'Not a recognized format. Expected BOLT12 strings (lno1/lni1), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
+                error: 'Not a recognized format. Expected BOLT12 strings (lno1/lni1), Cashu tokens (cashu...), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
             };
         }
     }
@@ -220,6 +223,34 @@ class BullishDecoder {
             return {
                 success: false,
                 error: `BOLT12 decoding failed: ${error.message}`
+            };
+        }
+    }
+    
+    decodeCashuToken(input) {
+        try {
+            this.updateStatus('Decoding Cashu token...');
+            
+            const decodedToken = getDecodedToken(input);
+            
+            // Format the Cashu token data for display
+            const formattedData = {
+                token: input,
+                mint: decodedToken.mint,
+                unit: decodedToken.unit,
+                proofs: decodedToken.proofs,
+                totalAmount: decodedToken.proofs.reduce((sum, proof) => sum + proof.amount, 0)
+            };
+            
+            return {
+                success: true,
+                type: 'cashu-token',
+                data: formattedData
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: `Cashu token decoding failed: ${error.message}`
             };
         }
     }
