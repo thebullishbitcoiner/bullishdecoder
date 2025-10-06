@@ -11,7 +11,6 @@ class BullishDecoder {
         this.inputField = document.getElementById('input-field');
         this.outputContent = document.getElementById('output-content');
         this.stringType = document.getElementById('string-type');
-        this.statusText = document.querySelector('.status-text');
         this.pasteButton = document.getElementById('paste-button');
         
         this.init();
@@ -25,8 +24,6 @@ class BullishDecoder {
         // Load version from package.json
         this.loadVersion();
         
-        // Initial status
-        this.updateStatus('Ready - Use paste button or Ctrl+V to decode');
     }
     
     handlePaste(event) {
@@ -53,7 +50,6 @@ class BullishDecoder {
                 this.decodeString(clipboardText.trim());
             }
         } catch (error) {
-            this.updateStatus('Failed to read clipboard - try pasting manually');
             console.error('Clipboard read failed:', error);
         }
     }
@@ -64,7 +60,6 @@ class BullishDecoder {
     }
     
     async decodeString(input) {
-        this.updateStatus('Decoding...');
         
         try {
             // Detect string type and decode
@@ -72,14 +67,11 @@ class BullishDecoder {
             
             if (result.success) {
                 this.displayResult(result);
-                this.updateStatus(`Successfully decoded ${result.type}`);
             } else {
                 this.displayError(result.error);
-                this.updateStatus('Decoding failed');
             }
         } catch (error) {
             this.displayError(`Unexpected error: ${error.message}`);
-            this.updateStatus('Error occurred');
         }
     }
     
@@ -119,7 +111,6 @@ class BullishDecoder {
     
     decodeLightningInvoice(input) {
         try {
-            this.updateStatus('Decoding Lightning invoice...');
             
             const invoice = new Invoice({ pr: input });
             
@@ -146,7 +137,7 @@ class BullishDecoder {
             
             return {
                 success: true,
-                type: 'lightning-invoice',
+                type: 'lightning invoice',
                 data: formattedData
             };
         } catch (error) {
@@ -159,7 +150,6 @@ class BullishDecoder {
     
     async decodeLightningAddress(input) {
         try {
-            this.updateStatus('Fetching Lightning address data...');
             
             const lnAddress = new LightningAddress(input);
             await lnAddress.fetch();
@@ -229,7 +219,6 @@ class BullishDecoder {
     
     decodeCashuToken(input) {
         try {
-            this.updateStatus('Decoding Cashu token...');
             
             const decodedToken = getDecodedToken(input);
             
@@ -268,7 +257,7 @@ class BullishDecoder {
         this.stringType.textContent = 'ERROR';
         this.stringType.className = 'string-type error';
         
-        this.outputContent.innerHTML = `<div class="error">${this.escapeHtml(error)}</div>`;
+        this.outputContent.innerHTML = this.escapeHtml(error);
         this.outputContent.className = 'output-content error';
     }
     
@@ -277,7 +266,6 @@ class BullishDecoder {
         this.stringType.className = 'string-type';
         this.outputContent.innerHTML = '<div class="placeholder">Waiting for input...</div>';
         this.outputContent.className = 'output-content';
-        this.updateStatus('Ready - Use paste button or Ctrl+V to decode');
     }
     
     formatJSON(obj) {
@@ -313,9 +301,6 @@ class BullishDecoder {
         return div.innerHTML;
     }
     
-    updateStatus(message) {
-        this.statusText.textContent = message;
-    }
     
     async loadVersion() {
         try {

@@ -18,7 +18,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -55,6 +55,9 @@ body {
 /* Input section */
 .input-section {
     margin-bottom: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .prompt-row {
@@ -106,7 +109,7 @@ body {
     font-size: 14px;
     padding: 15px;
     resize: none;
-    min-height: 80px;
+    flex: 1;
     transition: border-color 0.3s ease;
     cursor: default;
 }
@@ -124,8 +127,10 @@ body {
 
 /* Output section */
 .output-section {
-    flex: 1;
+    flex: 2;
     margin-bottom: 21px;
+    display: flex;
+    flex-direction: column;
 }
 
 .output-header {
@@ -157,12 +162,17 @@ body {
     display: inline-block;
 }
 
+.string-type.error {
+    border: 1px solid #ff4444;
+    color: #ff4444;
+}
+
 .output-content {
     background-color: #000000;
     border: 1px solid #333;
     border-radius: 4px;
     padding: 20px;
-    min-height: 200px;
+    flex: 1;
     font-size: 13px;
     overflow-x: auto;
     white-space: pre;
@@ -198,13 +208,11 @@ body {
 }
 
 /* Error styling */
-.error {
-    color: #ff4444;
-    background-color: #2a0f0f;
-    border: 1px solid #ff4444;
-    padding: 15px;
-    border-radius: 4px;
-    margin: 10px 0;
+.output-content.error {
+    color: #ff9900;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Success styling */
@@ -224,20 +232,20 @@ body {
     border-top: 1px solid #333;
 }
 
-.status-line {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.footer-text {
     font-size: 12px;
-}
-
-.cursor {
-    color: #ff9900;
-    animation: blink 1s infinite;
-}
-
-.status-text {
     color: #666;
+    text-align: center;
+}
+
+.footer-text a {
+    color: #ff9900;
+    text-decoration: none;
+}
+
+.footer-text a:hover {
+    color: #ffaa00;
+    text-decoration: underline;
 }
 
 @keyframes blink {
