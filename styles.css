@@ -26,9 +26,9 @@ body {
 /* Header */
 .header {
     text-align: left;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     border-bottom: 1px solid #333;
-    padding-bottom: 15px;
+    padding-bottom: 8px;
 }
 
 .terminal-title {
@@ -137,9 +137,7 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #333;
+    margin-bottom: 10px;
 }
 
 .output-label {
@@ -179,12 +177,6 @@ body {
     word-break: normal;
 }
 
-.placeholder {
-    color: #666;
-    font-style: italic;
-    text-align: center;
-    padding: 40px 20px;
-}
 
 /* JSON formatting */
 .json-key {

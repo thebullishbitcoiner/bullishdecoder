@@ -1,7 +1,7 @@
 // bullishDecoder - BOLT12 Decoder PWA
 import BOLT12Decoder from 'bolt12-decoder';
 import { LightningAddress } from '@getalby/lightning-tools';
-import { Invoice } from '@getalby/lightning-tools/bolt11';
+import { decode } from '@gandlaf21/bolt11-decode';
 import { getDecodedToken } from '@cashu/cashu-ts';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
@@ -111,34 +111,12 @@ class BullishDecoder {
     
     decodeLightningInvoice(input) {
         try {
-            
-            const invoice = new Invoice({ pr: input });
-            
-            // Format the lightning invoice data for display
-            const formattedData = {
-                paymentRequest: input,
-                amount: invoice.amount,
-                amountMsat: invoice.amountMsat,
-                description: invoice.description,
-                descriptionHash: invoice.descriptionHash,
-                paymentHash: invoice.paymentHash,
-                paymentSecret: invoice.paymentSecret,
-                destination: invoice.destination,
-                timestamp: invoice.timestamp,
-                expiry: invoice.expiry,
-                cltvExpiry: invoice.cltvExpiry,
-                features: invoice.features,
-                network: invoice.network,
-                tags: invoice.tags,
-                isExpired: invoice.isExpired,
-                isExpiredAt: invoice.isExpiredAt,
-                isExpiredAtDate: invoice.isExpiredAtDate
-            };
+            const decoded = decode(input);
             
             return {
                 success: true,
                 type: 'lightning invoice',
-                data: formattedData
+                data: decoded
             };
         } catch (error) {
             return {
@@ -176,7 +154,7 @@ class BullishDecoder {
             
             return {
                 success: true,
-                type: 'lightning-address',
+                type: 'lightning address',
                 data: formattedData
             };
         } catch (error) {
@@ -223,7 +201,7 @@ class BullishDecoder {
             
             return {
                 success: true,
-                type: 'cashu-token',
+                type: 'cashu token',
                 data: decodedToken
             };
         } catch (error) {
@@ -254,7 +232,7 @@ class BullishDecoder {
     clearOutput() {
         this.stringType.textContent = '';
         this.stringType.className = 'string-type';
-        this.outputContent.innerHTML = '<div class="placeholder">Waiting for input...</div>';
+        this.outputContent.innerHTML = '';
         this.outputContent.className = 'output-content';
     }
     
