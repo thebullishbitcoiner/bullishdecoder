@@ -2,7 +2,7 @@
 import BOLT12Decoder from 'bolt12-decoder';
 import { LightningAddress } from '@getalby/lightning-tools';
 import { decode } from '@gandlaf21/bolt11-decode';
-import { getDecodedToken } from '@cashu/cashu-ts';
+import { getDecodedToken, decodePaymentRequest } from '@cashu/cashu-ts';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
 
@@ -86,6 +86,8 @@ class BullishDecoder {
             return this.decodeBOLT12(cleanInput, 'invoice');
         } else if (cleanInput.startsWith('cashu')) {
             return this.decodeCashuToken(cleanInput);
+        } else if (cleanInput.startsWith('creq')) {
+            return this.decodeCashuPaymentRequest(cleanInput);
         } else if (this.isLightningInvoice(cleanInput)) {
             return this.decodeLightningInvoice(cleanInput);
         } else if (this.isLightningAddress(cleanInput)) {
@@ -93,7 +95,7 @@ class BullishDecoder {
         } else {
             return {
                 success: false,
-                error: 'Not a recognized format. Expected BOLT12 strings (lno1/lni1), Cashu tokens (cashu...), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
+                error: 'Not a recognized format. Expected BOLT12 strings (lno1/lni1), Cashu tokens (cashu...), Cashu payment requests (creq...), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
             };
         }
     }
@@ -208,6 +210,23 @@ class BullishDecoder {
             return {
                 success: false,
                 error: `Cashu token decoding failed: ${error.message}`
+            };
+        }
+    }
+    
+    decodeCashuPaymentRequest(input) {
+        try {
+            const decodedRequest = decodePaymentRequest(input);
+            
+            return {
+                success: true,
+                type: 'cashu payment request',
+                data: decodedRequest
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: `Cashu payment request decoding failed: ${error.message}`
             };
         }
     }

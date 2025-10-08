@@ -1,6 +1,6 @@
 {
   "name": "bullishdecoder",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "A bullish PWA to decode all the things",
   "main": "index.html",
   "scripts": {
@@ -21,6 +21,7 @@
     "lnurl",
     "cashu",
     "cashu-token",
+    "cashu-payment-request",
     "decoder",
     "terminal"
   ],
