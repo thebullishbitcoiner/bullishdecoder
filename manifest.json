@@ -1,7 +1,7 @@
 {
   "name": "bullishDecoder",
   "short_name": "bullishDecoder",
-  "description": "A bullish PWA to decode all the things",
+  "description": "A bullish PWA to decode all the strings",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
