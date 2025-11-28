@@ -3,8 +3,10 @@ import BOLT12Decoder from 'bolt12-decoder';
 import { LightningAddress } from '@getalby/lightning-tools';
 import { decode } from '@gandlaf21/bolt11-decode';
 import { getDecodedToken, decodePaymentRequest } from '@cashu/cashu-ts';
+import { decodeBech32 } from '@shocknet/clink-sdk';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
+console.log('decodeBech32 imported:', decodeBech32);
 
 class BullishDecoder {
     constructor() {
@@ -79,8 +81,12 @@ class BullishDecoder {
         // Remove any whitespace
         const cleanInput = input.replace(/\s/g, '');
         
+        // Check if it's a CLINK static offer (starts with noffer1)
+        if (cleanInput.startsWith('noffer1')) {
+            return this.decodeCLINK(cleanInput);
+        }
         // Check if it's a BOLT12 string (starts with lno1 or lni1)
-        if (cleanInput.startsWith('lno1')) {
+        else if (cleanInput.startsWith('lno1')) {
             return this.decodeBOLT12(cleanInput, 'offer');
         } else if (cleanInput.startsWith('lni1')) {
             return this.decodeBOLT12(cleanInput, 'invoice');
@@ -95,7 +101,7 @@ class BullishDecoder {
         } else {
             return {
                 success: false,
-                error: 'Not a recognized format. Expected BOLT12 strings (lno1/lni1), Cashu tokens (cashu...), Cashu payment requests (creq...), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
+                error: 'Not a recognized format. Expected CLINK offers (noffer1...), BOLT12 strings (lno1/lni1), Cashu tokens (cashu...), Cashu payment requests (creq...), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
             };
         }
     }
@@ -163,6 +169,36 @@ class BullishDecoder {
             return {
                 success: false,
                 error: `Lightning address decoding failed: ${error.message}`
+            };
+        }
+    }
+    
+    decodeCLINK(input) {
+        try {
+            if (typeof decodeBech32 === 'undefined') {
+                throw new Error('decodeBech32 function not loaded');
+            }
+            
+            const decoded = decodeBech32(input);
+            
+            // Verify the decoded type is 'noffer'
+            if (decoded.type !== 'noffer') {
+                return {
+                    success: false,
+                    error: `Type mismatch: expected noffer, got ${decoded.type}`
+                };
+            }
+            
+            // Return only the data part (without the type wrapper)
+            return {
+                success: true,
+                type: 'clink-offer',
+                data: decoded.data
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: `CLINK decoding failed: ${error.message}`
             };
         }
     }

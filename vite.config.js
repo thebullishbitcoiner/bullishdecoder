@@ -15,7 +15,7 @@ export default defineConfig({
     open: true
   },
   optimizeDeps: {
-    include: ['bolt12-decoder']
+    include: ['bolt12-decoder', '@shocknet/clink-sdk']
   },
   resolve: {
     alias: {
