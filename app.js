@@ -4,6 +4,7 @@ import { LightningAddress } from '@getalby/lightning-tools';
 import { decode } from '@gandlaf21/bolt11-decode';
 import { getDecodedToken, decodePaymentRequest } from '@cashu/cashu-ts';
 import { decodeBech32 } from '@shocknet/clink-sdk';
+import { nip19 } from 'nostr-tools';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
 console.log('decodeBech32 imported:', decodeBech32);
@@ -98,10 +99,12 @@ class BullishDecoder {
             return this.decodeLightningInvoice(cleanInput);
         } else if (this.isLightningAddress(cleanInput)) {
             return await this.decodeLightningAddress(cleanInput);
+        } else if (this.isNostrEntity(cleanInput)) {
+            return this.decodeNostr(cleanInput);
         } else {
             return {
                 success: false,
-                error: 'Not a recognized format. Expected CLINK offers (noffer1...), BOLT12 strings (lno1/lni1), Cashu tokens (cashu...), Cashu payment requests (creq...), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
+                error: 'Not a recognized format. Expected Nostr entities (npub/nsec/note/nprofile/nevent/naddr), CLINK offers (noffer1...), BOLT12 strings (lno1/lni1), Cashu tokens (cashu...), Cashu payment requests (creq...), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
             };
         }
     }
@@ -111,6 +114,11 @@ class BullishDecoder {
         return input.startsWith('lnbc') || input.startsWith('lntb');
     }
     
+    isNostrEntity(input) {
+        return ['npub1', 'nsec1', 'note1', 'nprofile1', 'nevent1', 'naddr1', 'nrelay1']
+            .some(prefix => input.startsWith(prefix));
+    }
+
     isLightningAddress(input) {
         // Basic lightning address validation: user@domain.com format
         const lightningAddressRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -173,6 +181,35 @@ class BullishDecoder {
         }
     }
     
+    decodeNostr(input) {
+        try {
+            const decoded = nip19.decode(input);
+            const data = this.serializeNostrData(decoded.type, decoded.data);
+
+            if (decoded.type === 'nsec') {
+                data._warning = 'PRIVATE KEY — never share this with anyone';
+            }
+
+            return {
+                success: true,
+                type: `nostr ${decoded.type}`,
+                data
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: `Nostr decoding failed: ${error.message}`
+            };
+        }
+    }
+
+    serializeNostrData(type, data) {
+        if (data instanceof Uint8Array) {
+            return { bytes_hex: Array.from(data).map(b => b.toString(16).padStart(2, '0')).join('') };
+        }
+        return data;
+    }
+
     decodeCLINK(input) {
         try {
             if (typeof decodeBech32 === 'undefined') {
