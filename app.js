@@ -5,6 +5,7 @@ import { decode } from '@gandlaf21/bolt11-decode';
 import { getDecodedToken, decodePaymentRequest } from '@cashu/cashu-ts';
 import { decodeBech32 } from '@shocknet/clink-sdk';
 import { nip19 } from 'nostr-tools';
+import { bech32 } from 'bech32';
 
 console.log('BOLT12Decoder imported:', BOLT12Decoder);
 console.log('decodeBech32 imported:', decodeBech32);
@@ -82,8 +83,12 @@ class BullishDecoder {
         // Remove any whitespace
         const cleanInput = input.replace(/\s/g, '');
         
+        // Check if it's an LNURL (starts with lnurl1, case-insensitive)
+        if (cleanInput.toLowerCase().startsWith('lnurl1')) {
+            return this.decodeLnurl(cleanInput);
+        }
         // Check if it's a CLINK static offer (starts with noffer1)
-        if (cleanInput.startsWith('noffer1')) {
+        else if (cleanInput.startsWith('noffer1')) {
             return this.decodeCLINK(cleanInput);
         }
         // Check if it's a BOLT12 string (starts with lno1 or lni1)
@@ -104,7 +109,7 @@ class BullishDecoder {
         } else {
             return {
                 success: false,
-                error: 'Not a recognized format. Expected Nostr entities (npub/nsec/note/nprofile/nevent/naddr), CLINK offers (noffer1...), BOLT12 strings (lno1/lni1), Cashu tokens (cashu...), Cashu payment requests (creq...), Lightning invoices (lnbc/lntb), or Lightning addresses (user@domain.com).'
+                error: 'Format not supported. You can just @ thebullishbitcoiner on Nostr to request for it to be added.'
             };
         }
     }
@@ -240,6 +245,33 @@ class BullishDecoder {
         }
     }
     
+    decodeLnurl(input) {
+        try {
+            const decoded = bech32.decode(input.toLowerCase(), 2000);
+
+            if (decoded.prefix !== 'lnurl') {
+                return {
+                    success: false,
+                    error: `Invalid LNURL prefix: expected 'lnurl', got '${decoded.prefix}'`
+                };
+            }
+
+            const bytes = bech32.fromWords(decoded.words);
+            const url = new TextDecoder().decode(new Uint8Array(bytes));
+
+            return {
+                success: true,
+                type: 'lnurl',
+                data: { url }
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: `LNURL decoding failed: ${error.message}`
+            };
+        }
+    }
+
     decodeBOLT12(input, expectedType) {
         try {
             // Use the BOLT12Decoder from the global scope
