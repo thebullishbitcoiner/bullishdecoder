@@ -23,6 +23,7 @@ class BullishDecoder {
     init() {
         // Add event listeners
         this.inputField.addEventListener('paste', this.handlePaste.bind(this));
+        this.inputField.addEventListener('keydown', this.handleKeydown.bind(this));
         this.pasteButton.addEventListener('click', this.handlePasteButton.bind(this));
         
         // Load version from package.json
@@ -30,6 +31,16 @@ class BullishDecoder {
         
     }
     
+    handleKeydown(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const input = this.inputField.value.trim();
+            if (input) {
+                this.decodeString(input);
+            }
+        }
+    }
+
     handlePaste(event) {
         // Small delay to ensure paste content is available
         setTimeout(() => {
@@ -81,7 +92,12 @@ class BullishDecoder {
     
     async detectAndDecode(input) {
         // Remove any whitespace
-        const cleanInput = input.replace(/\s/g, '');
+        let cleanInput = input.replace(/\s/g, '');
+
+        // Strip nostr: URI prefix if present
+        if (cleanInput.toLowerCase().startsWith('nostr:')) {
+            cleanInput = cleanInput.slice(6);
+        }
         
         // Check if it's an LNURL (starts with lnurl1, case-insensitive)
         if (cleanInput.toLowerCase().startsWith('lnurl1')) {
